@@ -3,8 +3,6 @@
 
 #include "Arduino.h"
 
-#include <memory>
-
 class HashMap {
     private:
         int _size;
