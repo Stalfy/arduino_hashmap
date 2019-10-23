@@ -1,6 +1,10 @@
 #ifndef HASHMAP_HPP_
 #define HASHMAP_HPP_
 
+#include "Arduino.h"
+
+#include <memory>
+
 class HashMap {
     private:
         int _size;

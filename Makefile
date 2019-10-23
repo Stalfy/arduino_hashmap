@@ -1,6 +1,7 @@
 # Directories.
 SRC_DIR   = src
 TEST_DIR  = test
+RELEASE_DIR  = HashMap
 
 BUILD_DIR = build
 SRC_BUILD_DIR = $(BUILD_DIR)/$(SRC_DIR)
@@ -30,6 +31,12 @@ MKDIR_P = mkdir -p
 
 # Executables.
 TEST_EXE = catchmain
+
+release:
+	cp $(SRC_DIR)/hashmap.cpp $(RELEASE_DIR)/hashmap.cpp
+	cp $(SRC_DIR)/hashmap.hpp $(RELEASE_DIR)/hashmap.hpp
+	sed -i '/^\#define HASHMAP_HPP_/a \\n\#include \"Arduino.h\"' $(RELEASE_DIR)/hashmap.hpp
+	zip $(RELEASE_DIR).zip $(RELEASE_DIR)/*
 
 test: $(TEST_EXE)
 	./$(TEST_EXE) $(CATCH_FLAGS)
