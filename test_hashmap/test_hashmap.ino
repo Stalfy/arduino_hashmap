@@ -21,6 +21,7 @@ void setup() {
 
     Serial.println("Begin test sequence.");
     testConstructor();
+    testPutNoCollision();
     Serial.println("End test sequence.");    
 }
 
@@ -32,5 +33,23 @@ void testConstructor() {
     assert(0 == hmap->getSize(), "Constructor default size.");
     assert(3 == hmap->getBuckets(), "Constructor buckets.");
     
+    delete hmap;
+}
+
+void testPutNoCollision() {
+    HashMap * hmap = new HashMap(3);
+
+    assert(0 == hmap->getSize(), "PUT [size]     (no collision).");
+    assert(-1 == hmap->get(0),   "PUT [Bucket 0] (no collision).");
+    assert(-1 == hmap->get(1),   "PUT [Bucket 1] (no collision).");
+    assert(-1 == hmap->get(2),   "PUT [Bucket 2] (no collision).");
+
+    hmap->put(0, 0);
+    hmap->put(2, 2);
+
+    assert(2 == hmap->getSize(), "PUT [size]     (no collision).");
+    assert(0 == hmap->get(0),    "PUT [Bucket 0] (no collision).");
+    assert(2 == hmap->get(2),    "PUT [Bucket 2] (no collision).");
+
     delete hmap;
 }

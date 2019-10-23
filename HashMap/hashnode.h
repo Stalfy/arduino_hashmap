@@ -10,6 +10,8 @@ class HashNode {
     public:
         HashNode(int key, int value);
         ~HashNode();
+
+        int getValue();
 };
 
 #endif

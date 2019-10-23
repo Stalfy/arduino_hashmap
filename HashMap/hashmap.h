@@ -6,16 +6,20 @@
 
 class HashMap {
     private:
-        int _size;
-        int _buckets;
+        uint8_t _size;
+        uint8_t _buckets;
 
         HashNode ** _hashTable;
+        uint32_t hash(int key);
     public:
-        HashMap(int buckets);
+        HashMap(uint8_t buckets);
         ~HashMap();
 
-        int getBuckets();
-        int getSize();
+        uint8_t getBuckets();
+        uint8_t getSize();
+
+        int get(int key);
+        void put(int key, int value);
 };
 
 #endif

@@ -9,3 +9,7 @@ HashNode::~HashNode() {
     Serial.print("Destroying node of key ");
     Serial.println(_key);
 }
+
+HashNode::getValue() {
+    return _value;
+}
