@@ -1,4 +1,4 @@
-#include "hashmap.hpp"
+#include "hashmap.h"
 
 /**
  * CONSTRUCTORS.
@@ -6,6 +6,13 @@
 HashMap::HashMap(int buckets) {
     _buckets = buckets;
     _size = 0;
+
+    _hashTable = new HashNode*[buckets];
+}
+
+HashMap::~HashMap() {
+    Serial.println("Destroying this HashMap.");
+    delete[] _hashTable;
 }
 
 /**

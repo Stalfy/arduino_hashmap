@@ -1,16 +1,18 @@
-#ifndef HASHMAP_HPP_
-#define HASHMAP_HPP_
+#ifndef HASHMAP_H_
+#define HASHMAP_H_
 
 #include "Arduino.h"
+#include "hashnode.h"
 
 class HashMap {
     private:
         int _size;
         int _buckets;
 
+        HashNode ** _hashTable;
     public:
         HashMap(int buckets);
-        ~HashMap() {}
+        ~HashMap();
 
         int getBuckets();
         int getSize();
