@@ -60,3 +60,14 @@ void HashMap::put(int key, int value) {
         _size++;
     }
 }
+
+void HashMap::remove(int key) {
+    uint8_t bucket = hash(key) % _buckets;
+    HashNode * node = _hashTable[bucket];
+
+    if(nullptr != node) {
+        delete _hashTable[bucket];
+        _hashTable[bucket] = nullptr;
+        _size--;
+    }
+}
