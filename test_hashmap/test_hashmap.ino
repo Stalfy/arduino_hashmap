@@ -35,7 +35,7 @@ void setup() {
 void loop() {}
 
 void testConstructor() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     assert(0 == hmap->getSize(), "Constructor default size.");
     assert(3 == hmap->getBuckets(), "Constructor buckets.");
@@ -48,7 +48,7 @@ void testConstructor() {
 }
 
 void testPutNoCollision() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(2, 2);
@@ -61,7 +61,7 @@ void testPutNoCollision() {
 }
 
 void testPutCollision() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -75,7 +75,7 @@ void testPutCollision() {
 }
 
 void testUpdateNoCollision() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(0, 2);
@@ -87,7 +87,7 @@ void testUpdateNoCollision() {
 }
 
 void testUpdateCollision() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -101,7 +101,7 @@ void testUpdateCollision() {
 }
 
 void testRemoveNoCollision() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(1, 1);
@@ -115,7 +115,7 @@ void testRemoveNoCollision() {
 }
 
 void testRemoveCollisionHead() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -131,7 +131,7 @@ void testRemoveCollisionHead() {
 }
 
 void testRemoveCollisionBody() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -147,7 +147,7 @@ void testRemoveCollisionBody() {
 }
 
 void testRemoveCollisionTail() {
-    HashMap * hmap = new HashMap(3);
+    HashMap<int, int>* hmap = new HashMap<int, int>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);

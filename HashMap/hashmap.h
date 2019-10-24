@@ -4,16 +4,17 @@
 #include "Arduino.h"
 #include "hashnode.h"
 
+template <typename K, typename V>
 class HashMap {
     private:
         uint8_t _size;
         uint8_t _buckets;
-        HashNode<int, int>** _hashTable;
+        HashNode<K, V>** _hashTable;
 
         /**
          * UTILITY METHODS.
          */
-        uint32_t hash(int key) {
+        uint32_t hash(K key) {
             return key;
         }
     public:
@@ -24,7 +25,7 @@ class HashMap {
             _buckets = buckets;
             _size = 0;
 
-            _hashTable = new HashNode<int, int>*[buckets]();
+            _hashTable = new HashNode<K, V>*[buckets]();
         }
 
         ~HashMap() {
@@ -32,7 +33,7 @@ class HashMap {
 
             for(uint8_t i = 0; i < _buckets; i++) {
                 while(nullptr != _hashTable[i]) {
-                    HashNode<int, int>* prev = _hashTable[i];
+                    HashNode<K, V>* prev = _hashTable[i];
                     _hashTable[i] = _hashTable[i]->getNext();
 
                     delete prev;
@@ -58,8 +59,8 @@ class HashMap {
         /**
          * MAP OPERATIONS.
          */
-        int get(int key) {
-            HashNode<int, int>* node = _hashTable[hash(key) % _buckets];
+        int get(K key) {
+            HashNode<K, K>* node = _hashTable[hash(key) % _buckets];
 
             while(nullptr != node && key != node->getKey()) {
                 node = node->getNext();
@@ -72,11 +73,11 @@ class HashMap {
             return -1;
         }
 
-        void put(int key, int value) {
+        void put(K key, K value) {
             uint8_t bucket = hash(key) % _buckets;
 
-            HashNode<int, int>* prev = nullptr;
-            HashNode<int, int>* node = _hashTable[bucket];
+            HashNode<K, V>* prev = nullptr;
+            HashNode<K, V>* node = _hashTable[bucket];
 
             while(nullptr != node && key != node->getKey()) {
                 prev = node;
@@ -86,9 +87,9 @@ class HashMap {
             if(nullptr == node) {
                 // Create a new node.
                 if(nullptr == prev) {
-                    _hashTable[bucket] = new HashNode<int, int>(key, value);
+                    _hashTable[bucket] = new HashNode<K, V>(key, value);
                 } else {
-                    prev->setNext(new HashNode<int, int>(key, value));
+                    prev->setNext(new HashNode<K, V>(key, value));
                 }
 
                 _size++;
@@ -101,8 +102,8 @@ class HashMap {
         void remove(int key) {
             uint8_t bucket = hash(key) % _buckets;
 
-            HashNode<int, int>* prev = nullptr;
-            HashNode<int, int>* node = _hashTable[bucket];
+            HashNode<K, V>* prev = nullptr;
+            HashNode<K, V>* node = _hashTable[bucket];
 
             while(nullptr != node && key != node->getKey()) {
                 prev = node;
