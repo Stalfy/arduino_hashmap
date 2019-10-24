@@ -14,15 +14,12 @@ HashMap::~HashMap() {
     Serial.println("Destroying contents of this HashMap.");
     
     for(uint8_t i = 0; i < _buckets; i++) {
-        HashNode* node = _hashTable[i];
-
-        while(nullptr != node) {
-            HashNode* prev = node;
-            node = node->getNext();
+        while(nullptr != _hashTable[i]) {
+            HashNode* prev = _hashTable[i];
+            _hashTable[i] = _hashTable[i]->getNext();
 
             delete prev;
-            prev = nullptr;
-        }   
+        }
     }
 
     Serial.println("Destroying this HashMap.");
@@ -76,7 +73,6 @@ void HashMap::put(int key, int value) {
         node = node->getNext();
     }
 
-
     if(nullptr == node) {
         // Create a new node.
         if(nullptr == prev) {
@@ -86,16 +82,37 @@ void HashMap::put(int key, int value) {
         }
 
         _size++;
+    } else {
+        // Update an existing node.
+        node->setValue(value);
     }
 }
 
 void HashMap::remove(int key) {
     uint8_t bucket = hash(key) % _buckets;
-    HashNode * node = _hashTable[bucket];
+    
+    HashNode* prev = nullptr;
+    HashNode* node = _hashTable[bucket];
+
+    while(nullptr != node && key != node->getKey()) {
+        prev = node;
+        node = node->getNext();
+    }
 
     if(nullptr != node) {
-        delete _hashTable[bucket];
-        _hashTable[bucket] = nullptr;
+        if(nullptr == prev) {
+            if(nullptr == node->getNext()) {
+                // Remove a bucket node.
+                delete _hashTable[bucket];
+                _hashTable[bucket] = nullptr;
+            } else {
+                // Replace a bucket node with the next in list.
+                _hashTable[bucket] = node->getNext();
+                delete node;
+                node = nullptr;
+            }
+        }
+
         _size--;
     }
 }
