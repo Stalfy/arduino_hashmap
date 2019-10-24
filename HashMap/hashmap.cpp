@@ -7,7 +7,7 @@ HashMap::HashMap(uint8_t buckets) {
     _buckets = buckets;
     _size = 0;
 
-    _hashTable = new HashNode*[buckets]();
+    _hashTable = new HashNode<int, int>*[buckets]();
 }
 
 HashMap::~HashMap() {
@@ -15,7 +15,7 @@ HashMap::~HashMap() {
     
     for(uint8_t i = 0; i < _buckets; i++) {
         while(nullptr != _hashTable[i]) {
-            HashNode* prev = _hashTable[i];
+            HashNode<int, int>* prev = _hashTable[i];
             _hashTable[i] = _hashTable[i]->getNext();
 
             delete prev;
@@ -49,7 +49,7 @@ uint32_t HashMap::hash(int key) {
  * MAP OPERATIONS.
  */
 int HashMap::get(int key) {
-    HashNode * node = _hashTable[hash(key) % _buckets];
+    HashNode<int, int>* node = _hashTable[hash(key) % _buckets];
 
     while(nullptr != node && key != node->getKey()) {
         node = node->getNext();
@@ -65,8 +65,8 @@ int HashMap::get(int key) {
 void HashMap::put(int key, int value) {
     uint8_t bucket = hash(key) % _buckets;
 
-    HashNode* prev = nullptr;
-    HashNode* node = _hashTable[bucket];
+    HashNode<int, int>* prev = nullptr;
+    HashNode<int, int>* node = _hashTable[bucket];
 
     while(nullptr != node && key != node->getKey()) {
         prev = node;
@@ -76,9 +76,9 @@ void HashMap::put(int key, int value) {
     if(nullptr == node) {
         // Create a new node.
         if(nullptr == prev) {
-            _hashTable[bucket] = new HashNode(key, value);
+            _hashTable[bucket] = new HashNode<int, int>(key, value);
         } else {
-            prev->setNext(new HashNode(key, value));
+            prev->setNext(new HashNode<int, int>(key, value));
         }
 
         _size++;
@@ -91,8 +91,8 @@ void HashMap::put(int key, int value) {
 void HashMap::remove(int key) {
     uint8_t bucket = hash(key) % _buckets;
     
-    HashNode* prev = nullptr;
-    HashNode* node = _hashTable[bucket];
+    HashNode<int, int>* prev = nullptr;
+    HashNode<int, int>* node = _hashTable[bucket];
 
     while(nullptr != node && key != node->getKey()) {
         prev = node;

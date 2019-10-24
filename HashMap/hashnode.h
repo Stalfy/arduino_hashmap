@@ -3,21 +3,46 @@
 
 #include "Arduino.h"
 
+template <typename K, typename V>
 class HashNode {
     private:
-        int _key;
-        int _value;
-        HashNode* _next;
+        K _key;
+        V _value;
+        HashNode<K, V>* _next;
     public:
-        HashNode(int key, int value);
-        ~HashNode();
+        // Constructors.
+        HashNode(K key, V value) {
+            _key = key;
+            _value = value;
+            _next = nullptr;        
+        }
 
-        int getKey();
-        int getValue();
-        HashNode* getNext();
+        ~HashNode() {
+            Serial.print("Destroying node of key ");
+            Serial.println(_key);
+        }
 
-        void setValue(int value);
-        void setNext(HashNode* next);
+        // Getters.
+        K getKey() {
+            return _key;
+        }
+
+        V getValue() {
+            return _value;
+        }
+
+        HashNode<K, V>* getNext() {
+            return _next;
+        }
+
+        // Setters.
+        void setValue(V value) {
+            _value = value;
+        }
+
+        void setNext(HashNode* next) {
+            _next = next;
+        }
 };
 
 #endif

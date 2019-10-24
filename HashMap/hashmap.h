@@ -9,7 +9,7 @@ class HashMap {
         uint8_t _size;
         uint8_t _buckets;
 
-        HashNode ** _hashTable;
+        HashNode<int, int>** _hashTable;
         uint32_t hash(int key);
     public:
         HashMap(uint8_t buckets);
