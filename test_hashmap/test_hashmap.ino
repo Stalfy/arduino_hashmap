@@ -117,11 +117,13 @@ void testRemoveCollisionHead() {
 
     hmap->put(0, 0);
     hmap->put(3, 3);
+    hmap->put(6, 6);
     hmap->remove(0);
 
-    assert(1 == hmap->getSize(), "REMOVE [size]     (collision head).");
+    assert(2 == hmap->getSize(), "REMOVE [size]     (collision head).");
     assert(-1 == hmap->get(0),   "REMOVE [Bucket 0] (collision head).");
     assert(3 == hmap->get(3),    "REMOVE [Bucket 0] (collision head).");
+    assert(6 == hmap->get(6),    "REMOVE [Bucket 0] (collision head).");
 
     delete hmap;
 }
