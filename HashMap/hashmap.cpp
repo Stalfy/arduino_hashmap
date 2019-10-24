@@ -103,25 +103,22 @@ void HashMap::remove(int key) {
         if(nullptr == prev) {
             if(nullptr == node->getNext()) {
                 // Remove a bucket node.
-                delete _hashTable[bucket];
                 _hashTable[bucket] = nullptr;
             } else {
                 // Remove a list head node.
                 _hashTable[bucket] = node->getNext();
-                delete node;
-                node = nullptr;
             }
         } else {
             if(nullptr == node->getNext()) {
                 // Remove a list tail node.
+                prev->setNext(nullptr);
             } else {
                 // Remove a list body node.
                 prev->setNext(node->getNext());
-                delete node;
-                node = nullptr;
             }
         }
 
+        delete node;
         _size--;
     }
 }
