@@ -27,6 +27,7 @@ void setup() {
     testUpdateCollision();
     testRemoveNoCollision();
     testRemoveCollisionHead();
+    testRemoveCollisionBody();
     Serial.println("End test sequence.");    
 }
 
@@ -124,6 +125,22 @@ void testRemoveCollisionHead() {
     assert(-1 == hmap->get(0),   "REMOVE [Bucket 0] (collision head).");
     assert(3 == hmap->get(3),    "REMOVE [Bucket 0] (collision head).");
     assert(6 == hmap->get(6),    "REMOVE [Bucket 0] (collision head).");
+
+    delete hmap;
+}
+
+void testRemoveCollisionBody() {
+    HashMap * hmap = new HashMap(3);
+
+    hmap->put(0, 0);
+    hmap->put(3, 3);
+    hmap->put(6, 6);
+    hmap->remove(3);
+
+    assert(2 == hmap->getSize(), "REMOVE [size]     (collision body).");
+    assert(0 == hmap->get(0),    "REMOVE [Bucket 0] (collision body).");
+    assert(-1 == hmap->get(3),   "REMOVE [Bucket 0] (collision body).");
+    assert(6 == hmap->get(6),    "REMOVE [Bucket 0] (collision body).");
 
     delete hmap;
 }

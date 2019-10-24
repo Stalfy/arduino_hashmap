@@ -106,8 +106,17 @@ void HashMap::remove(int key) {
                 delete _hashTable[bucket];
                 _hashTable[bucket] = nullptr;
             } else {
-                // Replace a bucket node with the next in list.
+                // Remove a list head node.
                 _hashTable[bucket] = node->getNext();
+                delete node;
+                node = nullptr;
+            }
+        } else {
+            if(nullptr == node->getNext()) {
+                // Remove a list tail node.
+            } else {
+                // Remove a list body node.
+                prev->setNext(node->getNext());
                 delete node;
                 node = nullptr;
             }
