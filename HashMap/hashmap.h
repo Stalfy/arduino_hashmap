@@ -2,21 +2,18 @@
 #define HASHMAP_H_
 
 #include "Arduino.h"
-#include "hashnode.h"
 
-template <typename K, typename V>
+#include "hashnode.h"
+#include "keyhash.h"
+
+template <typename K, typename V, typename H>
 class HashMap {
     private:
         uint8_t _size;
         uint8_t _buckets;
-        HashNode<K, V>** _hashTable;
 
-        /**
-         * UTILITY METHODS.
-         */
-        uint32_t hash(K key) {
-            return key;
-        }
+        HashNode<K, V>** _hashTable;
+        H hash;
     public:
         /**
          * CONSTRUCTORS.
