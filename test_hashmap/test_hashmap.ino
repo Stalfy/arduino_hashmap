@@ -16,14 +16,14 @@ void _assert(bool cond, String desc, int line) {
     Serial.println(info);
 }
 
-class TestHash : public KeyHash<int> {
+class H : public KeyHash<int> {
     public:
         uint32_t operator() (int key) {
             return key;
         }
 };
 
-class TestComp : public KeyComparator<int> {
+class C : public KeyComparator<int> {
     public:
         bool operator() (int keyA, int keyB) {
             return keyA == keyB;
@@ -43,13 +43,17 @@ void setup() {
     testRemoveCollisionHead();
     testRemoveCollisionBody();
     testRemoveCollisionTail();
+
+    testIntToString();
+    // testIntToFunctor();
+    // testIntToFuncPtr();
     Serial.println("End test sequence.");    
 }
 
 void loop() {}
 
 void testConstructor() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     assert(0 == hmap->getSize(), "Constructor default size.");
     assert(3 == hmap->getBuckets(), "Constructor buckets.");
@@ -63,7 +67,7 @@ void testConstructor() {
 }
 
 void testPutNoCollision() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(2, 2);
@@ -80,7 +84,7 @@ void testPutNoCollision() {
 }
 
 void testPutCollision() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -99,7 +103,7 @@ void testPutCollision() {
 }
 
 void testUpdateNoCollision() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(0, 2);
@@ -114,7 +118,7 @@ void testUpdateNoCollision() {
 }
 
 void testUpdateCollision() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -131,7 +135,7 @@ void testUpdateCollision() {
 }
 
 void testRemoveNoCollision() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(1, 1);
@@ -147,7 +151,7 @@ void testRemoveNoCollision() {
 }
 
 void testRemoveCollisionHead() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -165,7 +169,7 @@ void testRemoveCollisionHead() {
 }
 
 void testRemoveCollisionBody() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -183,7 +187,7 @@ void testRemoveCollisionBody() {
 }
 
 void testRemoveCollisionTail() {
-    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
+    HashMap<int, int, H, C>* hmap = new HashMap<int, int, H, C>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -198,4 +202,20 @@ void testRemoveCollisionTail() {
     assert(false == hmap->get(6, &v),   "REMOVE [Bucket 0] (collision tail).");
 
     delete hmap;
+}
+
+void testIntToString() {
+    HashMap<int, String, H, C>* hmap = new HashMap<int, String, H, C>(3);
+
+    String expected = "The test string";
+    hmap->put(0, expected);
+    
+    String v;
+    assert(true == hmap->get(0, &v), "INT to STRING mapping.");
+    assert(expected.equals(v),       "INT to STRING mapping.");
+
+    expected = "The update";
+    hmap->put(0, "The update");
+    assert(true == hmap->get(0, &v), "INT to STRING mapping.");
+    assert(expected.equals(v),       "INT to STRING mapping.");
 }
