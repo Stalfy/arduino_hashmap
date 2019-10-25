@@ -3,9 +3,9 @@
 
 #include "Arduino.h"
 
-#include "hashnode.h"
-#include "keyhash.h"
-#include "keycomparator.h"
+#include "src/hashnode.h"
+#include "src/keyhash.h"
+#include "src/keycomparator.h"
 
 template <typename K, typename V, typename H, typename C>
 class HashMap {
@@ -28,8 +28,6 @@ class HashMap {
         }
 
         ~HashMap() {
-            Serial.println("Destroying contents of this HashMap.");
-
             for(uint8_t i = 0; i < _buckets; i++) {
                 while(nullptr != _hashTable[i]) {
                     HashNode<K, V>* prev = _hashTable[i];
@@ -39,7 +37,6 @@ class HashMap {
                 }
             }
 
-            Serial.println("Destroying this HashMap.");
             delete[] _hashTable;
             _hashTable = nullptr;
         }
@@ -58,21 +55,22 @@ class HashMap {
         /**
          * MAP OPERATIONS.
          */
-        int get(K key) {
-            HashNode<K, K>* node = _hashTable[hash(key) % _buckets];
+        bool get(K key, V * value) {
+            HashNode<K, V>* node = _hashTable[hash(key) % _buckets];
 
             while(nullptr != node && !keyEquals(key, node->getKey())) {
                 node = node->getNext();
             }
 
             if(nullptr != node) {
-                return node->getValue();
+                *value = node->getValue();
+                return true;
             }
 
-            return -1;
+            return false;
         }
 
-        void put(K key, K value) {
+        void put(K key, V value) {
             uint8_t bucket = hash(key) % _buckets;
 
             HashNode<K, V>* prev = nullptr;
@@ -98,7 +96,7 @@ class HashMap {
             }
         }
 
-        void remove(int key) {
+        void remove(K key) {
             uint8_t bucket = hash(key) % _buckets;
 
             HashNode<K, V>* prev = nullptr;

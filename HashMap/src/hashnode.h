@@ -17,10 +17,7 @@ class HashNode {
             _next = nullptr;        
         }
 
-        ~HashNode() {
-            Serial.print("Destroying node of key ");
-            Serial.println(_key);
-        }
+        ~HashNode() { }
 
         // Getters.
         K getKey() {

@@ -54,9 +54,10 @@ void testConstructor() {
     assert(0 == hmap->getSize(), "Constructor default size.");
     assert(3 == hmap->getBuckets(), "Constructor buckets.");
 
-    assert(-1 == hmap->get(0), "Constructor [Bucket 0].");
-    assert(-1 == hmap->get(1), "Constructor [Bucket 1].");
-    assert(-1 == hmap->get(2), "Constructor [Bucket 2].");
+    int v = 0;
+    assert(false == hmap->get(0, &v), "Constructor [Bucket 0].");
+    assert(false == hmap->get(1, &v), "Constructor [Bucket 1].");
+    assert(false == hmap->get(2, &v), "Constructor [Bucket 2].");
 
     delete hmap;
 }
@@ -68,8 +69,12 @@ void testPutNoCollision() {
     hmap->put(2, 2);
 
     assert(2 == hmap->getSize(), "PUT [size]     (no collision).");
-    assert(0 == hmap->get(0),    "PUT [Bucket 0] (no collision).");
-    assert(2 == hmap->get(2),    "PUT [Bucket 2] (no collision).");
+
+    int v;
+    assert(true == hmap->get(0, &v),    "PUT [Bucket 0] (no collision).");
+    assert(0 == v,                      "PUT [Bucket 0] (no collision).");
+    assert(true == hmap->get(2, &v),    "PUT [Bucket 2] (no collision).");
+    assert(2 == v,                      "PUT [Bucket 2] (no collision).");
 
     delete hmap;
 }
@@ -81,9 +86,14 @@ void testPutCollision() {
     hmap->put(3, 3);
 
     assert(2 == hmap->getSize(),  "PUT [size]     (collision).");
-    assert(0 == hmap->get(0),     "PUT [Bucket 0] (collision).");
-    assert(3 == hmap->get(3),     "PUT [Bucket 0] (collision).");
-    assert(-1 == hmap->get(6),    "PUT [Bucket 0] (collision).");
+
+    int v;
+    assert(true == hmap->get(0, &v),  "PUT [Bucket 0] (collision).");
+    assert(0 == v,                    "PUT [Bucket 0] (collision).");
+    assert(true == hmap->get(3, &v),  "PUT [Bucket 0] (collision).");
+    assert(3 == v,                    "PUT [Bucket 0] (collision).");
+    assert(false == hmap->get(6, &v), "PUT [Bucket 0] (collision).");
+    assert(3 == v,                    "PUT [Bucket 0] (collision).");
 
     delete hmap;
 }
@@ -95,7 +105,10 @@ void testUpdateNoCollision() {
     hmap->put(0, 2);
 
     assert(1 == hmap->getSize(), "UPDATE [size]     (no collision).");
-    assert(2 == hmap->get(0),    "UPDATE [Bucket 0] (no collision).");
+
+    int v;
+    assert(true == hmap->get(0, &v), "UPDATE [Bucket 0] (no collision).");
+    assert(2 == v,                   "UPDATE [Bucket 0] (no collision).");
 
     delete hmap;
 }
@@ -108,8 +121,11 @@ void testUpdateCollision() {
     hmap->put(3, 1);
 
     assert(2 == hmap->getSize(), "UPDATE [size]     (collision).");
-    assert(0 == hmap->get(0),    "UPDATE [Bucket 0] (collision).");
-    assert(1 == hmap->get(3),    "UPDATE [Bucket 0] (collision).");
+
+    int v;
+    assert(true == hmap->get(0, &v), "UPDATE [Bucket 0] (collision).");
+    assert(true == hmap->get(3, &v), "UPDATE [Bucket 0] (collision).");
+    assert(1 == v,                   "UPDATE [Bucket 0] (collision).");
 
     delete hmap;
 }
@@ -122,8 +138,10 @@ void testRemoveNoCollision() {
     hmap->remove(0);
 
     assert(1 == hmap->getSize(), "REMOVE [size]     (no collision).");
-    assert(-1 == hmap->get(0),   "REMOVE [Bucket 0] (no collision).");
-    assert(1 == hmap->get(1),    "REMOVE [Bucket 1] (no collision).");
+
+    int v;
+    assert(false == hmap->get(0, &v), "REMOVE [Bucket 0] (no collision).");
+    assert(true == hmap->get(1, &v),  "REMOVE [Bucket 1] (no collision).");
 
     delete hmap;
 }
@@ -137,9 +155,11 @@ void testRemoveCollisionHead() {
     hmap->remove(0);
 
     assert(2 == hmap->getSize(), "REMOVE [size]     (collision head).");
-    assert(-1 == hmap->get(0),   "REMOVE [Bucket 0] (collision head).");
-    assert(3 == hmap->get(3),    "REMOVE [Bucket 0] (collision head).");
-    assert(6 == hmap->get(6),    "REMOVE [Bucket 0] (collision head).");
+
+    int v;
+    assert(false == hmap->get(0, &v),   "REMOVE [Bucket 0] (collision head).");
+    assert(true == hmap->get(3, &v),    "REMOVE [Bucket 0] (collision head).");
+    assert(true == hmap->get(6, &v),    "REMOVE [Bucket 0] (collision head).");
 
     delete hmap;
 }
@@ -153,9 +173,11 @@ void testRemoveCollisionBody() {
     hmap->remove(3);
 
     assert(2 == hmap->getSize(), "REMOVE [size]     (collision body).");
-    assert(0 == hmap->get(0),    "REMOVE [Bucket 0] (collision body).");
-    assert(-1 == hmap->get(3),   "REMOVE [Bucket 0] (collision body).");
-    assert(6 == hmap->get(6),    "REMOVE [Bucket 0] (collision body).");
+
+    int v;
+    assert(true == hmap->get(0, &v),    "REMOVE [Bucket 0] (collision body).");
+    assert(false == hmap->get(3, &v),   "REMOVE [Bucket 0] (collision body).");
+    assert(true == hmap->get(6, &v),    "REMOVE [Bucket 0] (collision body).");
 
     delete hmap;
 }
@@ -169,9 +191,11 @@ void testRemoveCollisionTail() {
     hmap->remove(6);
 
     assert(2 == hmap->getSize(), "REMOVE [size]     (collision tail).");
-    assert(0 == hmap->get(0),    "REMOVE [Bucket 0] (collision tail).");
-    assert(3 == hmap->get(3),    "REMOVE [Bucket 0] (collision tail).");
-    assert(-1 == hmap->get(6),   "REMOVE [Bucket 0] (collision tail).");
+
+    int v;
+    assert(true == hmap->get(0, &v),    "REMOVE [Bucket 0] (collision tail).");
+    assert(true == hmap->get(3, &v),    "REMOVE [Bucket 0] (collision tail).");
+    assert(false == hmap->get(6, &v),   "REMOVE [Bucket 0] (collision tail).");
 
     delete hmap;
 }
