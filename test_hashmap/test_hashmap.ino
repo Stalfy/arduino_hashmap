@@ -46,7 +46,7 @@ void setup() {
 
     testIntToString();
     testIntToFunctor();
-    // testIntToFuncPtr();
+    testIntToFuncPtr();
     Serial.println("End test sequence.");    
 }
 
@@ -260,6 +260,30 @@ void testIntToFunctor() {
     hmap->put(0, new FalseFunctor());
     assert(true == hmap->get(0, &v), "INT to FUNCTOR mapping.");
     assert(false == v->operator()(), "INT to FUNCTOR mapping."); 
+    
+    delete hmap;
+}
+
+typedef int (*pfunc)();
+int pfuncInsert() {
+    return 1;
+}
+
+int pfuncUpdate() {
+    return 2;
+}
+
+void testIntToFuncPtr() {
+    HashMap<int, pfunc, H, C>* hmap = new HashMap<int, pfunc, H, C>(3);
+    hmap->put(0, pfuncInsert);
+
+    pfunc v;
+    assert(true == hmap->get(0, &v), "INT to FUNC_PTR mapping insert.");
+    assert(1 == v(),                 "INT to FUNC_PTR mapping insert.");
+    
+    hmap->put(0, pfuncUpdate);
+    assert(true == hmap->get(0, &v), "INT to FUNC_PTR mapping update.");
+    assert(2 == v(),                 "INT to FUNC_PTR mapping update.");
     
     delete hmap;
 }
