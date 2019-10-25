@@ -45,7 +45,7 @@ void setup() {
     testRemoveCollisionTail();
 
     testIntToString();
-    // testIntToFunctor();
+    testIntToFunctor();
     // testIntToFuncPtr();
     Serial.println("End test sequence.");    
 }
@@ -218,4 +218,48 @@ void testIntToString() {
     hmap->put(0, "The update");
     assert(true == hmap->get(0, &v), "INT to STRING mapping.");
     assert(expected.equals(v),       "INT to STRING mapping.");
+
+    delete hmap;
+}
+
+void testIntToFunctor() {
+    class TestFunctor {
+        public:
+            virtual bool operator() () = 0;
+    };
+
+    class TrueFunctor : public TestFunctor {
+        public:
+            ~TrueFunctor() {
+                Serial.println("I true ded");
+            }
+
+            bool operator() () {
+                return true;
+            }
+    };
+
+    class FalseFunctor : public TestFunctor {
+        public:
+            ~FalseFunctor() {
+                Serial.println("I false ded");
+            }
+
+            bool operator() () {
+                return false;
+            }
+    };
+
+    HashMap<int, TestFunctor*, H, C>* hmap = new HashMap<int, TestFunctor*, H, C>(3);
+    hmap->put(0, new TrueFunctor());
+
+    TestFunctor* v;
+    assert(true == hmap->get(0, &v), "INT to FUNCTOR mapping.");
+    assert(true == v->operator()(),  "INT to FUNCTOR mapping."); 
+    
+    hmap->put(0, new FalseFunctor());
+    assert(true == hmap->get(0, &v), "INT to FUNCTOR mapping.");
+    assert(false == v->operator()(), "INT to FUNCTOR mapping."); 
+    
+    delete hmap;
 }
