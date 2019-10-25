@@ -23,6 +23,13 @@ class TestHash : public KeyHash<int> {
         }
 };
 
+class TestComp : public KeyComparator<int> {
+    public:
+        bool operator() (int keyA, int keyB) {
+            return keyA == keyB;
+        }
+};
+
 void setup() {
     Serial.begin(9600);
 
@@ -42,7 +49,7 @@ void setup() {
 void loop() {}
 
 void testConstructor() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     assert(0 == hmap->getSize(), "Constructor default size.");
     assert(3 == hmap->getBuckets(), "Constructor buckets.");
@@ -55,7 +62,7 @@ void testConstructor() {
 }
 
 void testPutNoCollision() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(2, 2);
@@ -68,7 +75,7 @@ void testPutNoCollision() {
 }
 
 void testPutCollision() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -82,7 +89,7 @@ void testPutCollision() {
 }
 
 void testUpdateNoCollision() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(0, 2);
@@ -94,7 +101,7 @@ void testUpdateNoCollision() {
 }
 
 void testUpdateCollision() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -108,7 +115,7 @@ void testUpdateCollision() {
 }
 
 void testRemoveNoCollision() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(1, 1);
@@ -122,7 +129,7 @@ void testRemoveNoCollision() {
 }
 
 void testRemoveCollisionHead() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -138,7 +145,7 @@ void testRemoveCollisionHead() {
 }
 
 void testRemoveCollisionBody() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);
@@ -154,7 +161,7 @@ void testRemoveCollisionBody() {
 }
 
 void testRemoveCollisionTail() {
-    HashMap<int, int, TestHash>* hmap = new HashMap<int, int, TestHash>(3);
+    HashMap<int, int, TestHash, TestComp>* hmap = new HashMap<int, int, TestHash, TestComp>(3);
 
     hmap->put(0, 0);
     hmap->put(3, 3);

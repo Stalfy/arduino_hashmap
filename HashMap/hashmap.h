@@ -5,8 +5,9 @@
 
 #include "hashnode.h"
 #include "keyhash.h"
+#include "keycomparator.h"
 
-template <typename K, typename V, typename H>
+template <typename K, typename V, typename H, typename C>
 class HashMap {
     private:
         uint8_t _size;
@@ -14,6 +15,7 @@ class HashMap {
 
         HashNode<K, V>** _hashTable;
         H hash;
+        C keyEquals;
     public:
         /**
          * CONSTRUCTORS.
@@ -59,7 +61,7 @@ class HashMap {
         int get(K key) {
             HashNode<K, K>* node = _hashTable[hash(key) % _buckets];
 
-            while(nullptr != node && key != node->getKey()) {
+            while(nullptr != node && !keyEquals(key, node->getKey())) {
                 node = node->getNext();
             }
 
@@ -76,7 +78,7 @@ class HashMap {
             HashNode<K, V>* prev = nullptr;
             HashNode<K, V>* node = _hashTable[bucket];
 
-            while(nullptr != node && key != node->getKey()) {
+            while(nullptr != node && !keyEquals(key, node->getKey())) {
                 prev = node;
                 node = node->getNext();
             }
@@ -102,7 +104,7 @@ class HashMap {
             HashNode<K, V>* prev = nullptr;
             HashNode<K, V>* node = _hashTable[bucket];
 
-            while(nullptr != node && key != node->getKey()) {
+            while(nullptr != node && !keyEquals(key, node->getKey())) {
                 prev = node;
                 node = node->getNext();
             }
