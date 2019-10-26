@@ -230,10 +230,6 @@ void testIntToFunctor() {
 
     class TrueFunctor : public TestFunctor {
         public:
-            ~TrueFunctor() {
-                Serial.println("I true ded");
-            }
-
             bool operator() () {
                 return true;
             }
@@ -241,10 +237,6 @@ void testIntToFunctor() {
 
     class FalseFunctor : public TestFunctor {
         public:
-            ~FalseFunctor() {
-                Serial.println("I false ded");
-            }
-
             bool operator() () {
                 return false;
             }
