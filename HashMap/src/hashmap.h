@@ -3,9 +3,9 @@
 
 #include "Arduino.h"
 
-#include "src/hashnode.h"
-#include "src/keyhash.h"
-#include "src/keycomparator.h"
+#include "hashnode.h"
+#include "keyhash.h"
+#include "keycomparator.h"
 
 template <typename K, typename V, typename H, typename C>
 class HashMap {
