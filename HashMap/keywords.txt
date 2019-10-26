@@ -5,18 +5,15 @@
 ####################################
 # Datatypes (KEYWORD1)
 ####################################
-
-HashMap       KEYWORD1
-KeyHash       KEYWORD1
-KeyComparator KEYWORD1
+HashMap	KEYWORD1
+KeyHash	KEYWORD1
+KeyComparator	KEYWORD1
 
 ####################################
 # Methods and Functions (KEYWORD2) 
 ####################################
-
-get        KEYWORD2
-put        KEYWORD2
-remove     KEYWORD2
-
-getSize    KEYWORD2
-getBuckets KEYWORD2
+get	KEYWORD2
+put	KEYWORD2
+remove	KEYWORD2
+getSize	KEYWORD2
+getBuckets	KEYWORD2
