@@ -209,7 +209,7 @@ void testIntToString() {
 
     String expected = "The test string";
     hmap->put(0, expected);
-    
+
     String v;
     assert(true == hmap->get(0, &v), "INT to STRING mapping.");
     assert(expected.equals(v),       "INT to STRING mapping.");
@@ -248,11 +248,11 @@ void testIntToFunctor() {
     TestFunctor* v;
     assert(true == hmap->get(0, &v), "INT to FUNCTOR mapping.");
     assert(true == v->operator()(),  "INT to FUNCTOR mapping."); 
-    
+
     hmap->put(0, new FalseFunctor());
     assert(true == hmap->get(0, &v), "INT to FUNCTOR mapping.");
     assert(false == v->operator()(), "INT to FUNCTOR mapping."); 
-    
+
     delete hmap;
 }
 
@@ -272,10 +272,10 @@ void testIntToFuncPtr() {
     pfunc v;
     assert(true == hmap->get(0, &v), "INT to FUNC_PTR mapping insert.");
     assert(1 == v(),                 "INT to FUNC_PTR mapping insert.");
-    
+
     hmap->put(0, pfuncUpdate);
     assert(true == hmap->get(0, &v), "INT to FUNC_PTR mapping update.");
     assert(2 == v(),                 "INT to FUNC_PTR mapping update.");
-    
+
     delete hmap;
 }
